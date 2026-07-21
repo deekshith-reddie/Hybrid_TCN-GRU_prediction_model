@@ -1,9 +1,9 @@
-# 🔥 SUPRA — Suppression of Pressure Oscillations Using Artificial Intelligence
+# ⚡ Active-loop Thermo-acoustic Instability Stabilization Prediction Model Using TCN-GRU Hybrid Architecture
 
 <p align="center">
-  <img src="cancellation_psd.png" width="750"/>
+  <img src="supra_lab.png" width="750"/>
   <br/>
-  <em>23.06 dB acoustic power suppression at the dominant thermoacoustic instability frequency</em>
+  <em>SUPRA experimental setup at IIT (ISM) Dhanbad — Dept. of Mechanical Engineering</em>
 </p>
 
 <p align="center">
@@ -48,20 +48,20 @@
 
 ## 📌 About the Project
 
-Thermoacoustic instability is one of the most dangerous and difficult-to-control phenomena in modern engineering. In gas turbines, jet engines, and rocket combustors, heat released by the flame can lock in phase with the chamber's natural acoustic modes, creating a **runaway positive feedback loop** that causes:
+Thermoacoustic instability is one of the most dangerous phenomena in modern combustion engineering. In gas turbines, jet engines, and rocket combustors, heat released by the flame can lock in phase with the chamber's natural acoustic modes, creating a **runaway positive feedback loop** that causes:
 
-- 💥 Structural fatigue of turbine blades and combustor walls  
-- 🔥 Flame blowout or flashback  
-- ⚙️ Complete mechanical failure of the combustion hardware  
+- 💥 Structural fatigue of turbine blades and combustor walls
+- 🔥 Flame blowout or flashback
+- ⚙️ Complete mechanical failure of the combustion hardware
 
-**Conventional passive solutions** (Helmholtz resonators, acoustic liners) only suppress instability at a fixed, narrow frequency range. They completely fail when operating conditions change.
+**Conventional passive solutions** (Helmholtz resonators, acoustic liners) only suppress instability at a fixed narrow frequency. They completely fail when operating conditions change.
 
-**SUPRA** solves this using a **Hybrid Temporal Convolutional Network + Gated Recurrent Unit (TCN-GRU)** deep learning model that:
+**This project** solves this using a **Hybrid TCN-GRU Neural Network** that:
 1. Continuously reads the live combustion pressure signal at 10,000 Hz
 2. **Predicts the pressure wave 20 ms into the future**
 3. Issues a phase-inverted counter-wave to the acoustic actuator early enough to physically cancel the instability
 
-> **The core insight:** The system doesn't react to the wave — it predicts it. By the time the actuator's counter-wave physically arrives at the combustion chamber, it arrives in perfect destructive interference with the instability.
+> **Core insight:** The system does not react to the wave — it predicts it. By the time the actuator's counter-wave physically arrives at the combustion chamber, it arrives in perfect destructive interference with the instability.
 
 ---
 
@@ -82,7 +82,7 @@ Thermoacoustic instability is one of the most dangerous and difficult-to-control
 <p align="center">
   <img src="supra_flowchart.png" width="800"/>
   <br/>
-  <em>End-to-end SUPRA control pipeline</em>
+  <em>End-to-end active control pipeline — from pressure sensor to acoustic actuator</em>
 </p>
 
 ### How it works — step by step:
@@ -92,37 +92,38 @@ Thermoacoustic instability is one of the most dangerous and difficult-to-control
 | 1️⃣ Sense | Piezoelectric transducer samples combustion pressure at 10,000 Hz |
 | 2️⃣ Buffer | Most recent 200 samples (20 ms window) assembled in a circular RAM buffer |
 | 3️⃣ Features | 3 multi-scale RMS envelopes computed on the fly (5ms, 50ms, 500ms) |
-| 4️⃣ Predict | Hybrid TCN-GRU model predicts the pressure 20 ms ahead (~6.89ms inference time) |
+| 4️⃣ Predict | Hybrid TCN-GRU model predicts pressure 20 ms ahead in ~6.89 ms |
 | 5️⃣ Invert | Predicted value multiplied by -1 (phase inversion) |
-| 6️⃣ Cancel | Inverted signal sent to acoustic actuator — physical waves cancel each other out ✅ |
+| 6️⃣ Cancel | Inverted signal sent to acoustic actuator — waves cancel each other ✅ |
 
 ---
 
-## 🧠 Neural Network Architecture (Hybrid TCN-GRU)
+## 🧠 Neural Network Architecture
 
 <p align="center">
   <img src="supra_nn_architecture.jpg" width="720"/>
   <br/>
-  <em>The Hybrid TCN-GRU model: 4-channel input → 6 dilated TCN blocks → SE-Attention → GRU tail → pressure prediction</em>
+  <em>Hybrid TCN-GRU: 4-channel input → 6 dilated TCN blocks → SE-Attention → GRU tail → pressure prediction</em>
 </p>
 
-### Why Hybrid? Why not just LSTM or TCN alone?
+### Why Hybrid TCN + GRU?
 
 | Model | Problem |
 |-------|---------|
-| **Pure LSTM** | Processes data one timestep at a time — far too slow for 10,000 Hz real-time control |
-| **Pure TCN** | Parallel and fast, but treats all timesteps independently — cannot detect "the instability is growing louder over time" |
-| **Hybrid TCN-GRU** ✅ | TCN extracts waveform shape features fast and in parallel. GRU tail adds sequential memory to track the amplitude growth trend |
+| **Pure LSTM** | Processes data one timestep at a time — too slow for 10,000 Hz real-time control |
+| **Pure TCN** | Fast and parallel, but cannot detect "the instability is growing louder over time" |
+| **Hybrid TCN-GRU** ✅ | TCN extracts waveform shape features fast. GRU tail adds sequential memory to track amplitude growth |
 
 ### Architecture Details
 
-- **Input:** 4-channel tensor of shape `(200, 4)` — raw pressure + RMS at 5ms/50ms/500ms timescales
-- **TCN Backbone:** 6 residual blocks with dilation rates `d = [1, 2, 4, 8, 16, 32]`, kernel size 3, 32 filters, SE-channel attention
-- **Receptive Field:** 253 samples (covers the full 200-sample window + 53 samples headroom)
-- **Self-Attention Layer:** 2-head, captures long-range phase relationships
-- **GRU Tail:** Stride-8 downsampling → 25 steps → 32-unit GRU for sequential amplitude memory
-- **Output:** Single scalar — predicted pressure at `t + 20ms`
-- **Total Parameters:** ~21,500
+| Layer | Detail |
+|-------|--------|
+| **Input** | Shape `(200, 4)` — raw pressure + RMS at 5ms / 50ms / 500ms |
+| **TCN Backbone** | 6 residual blocks, dilation `d=[1,2,4,8,16,32]`, SE-attention |
+| **Receptive Field** | 253 samples — fully covers the 200-sample input |
+| **GRU Tail** | Stride-8 downsampling → 25 steps → 32-unit GRU |
+| **Output** | Single scalar — pressure at `t + 20ms` |
+| **Total Params** | ~21,500 |
 
 ---
 
@@ -148,73 +149,65 @@ Thermoacoustic instability is one of the most dangerous and difficult-to-control
 ---
 
 ### Training History
-
 <p align="center">
   <img src="training_history.png" width="700"/>
 </p>
 
-Training and validation MSE tracked tightly for all 50 epochs with no overfitting. The four kinks are `ReduceLROnPlateau` halving events at epochs 23, 32, 42, and 47.
+Training and validation MSE tracked tightly for all 50 epochs with no overfitting.
 
 ---
 
-### Prediction Accuracy — Actual vs Predicted
-
+### Prediction Accuracy
 <p align="center">
   <img src="pred_vs_actual_scatter.png" width="600"/>
+  <br/><em>Actual vs Predicted Pressure — R² = 0.988</em>
 </p>
-
-Tight diagonal clustering with R² = 0.988. No amplitude compression at peaks — a common failure of pure-TCN models that the GRU tail corrects.
 
 ---
 
 ### Residual Analysis
-
 <p align="center">
   <img src="residual_autocorrelation.png" width="45%"/>
   <img src="error_analysis.png" width="45%"/>
 </p>
 
-ACF of residuals decays rapidly to zero (near white-noise errors). Error distribution is Gaussian and centred at zero — no systematic directional bias.
+ACF decays to zero (white-noise residuals). Error distribution is Gaussian centred at zero — no systematic bias.
 
 ---
 
 ### Active Cancellation — Time Domain
-
 <p align="center">
   <img src="cancellation_timedomain.png" width="800"/>
 </p>
 
-**19.55 dB RMS reduction.** The amplitude of the instability is reduced by a factor of ~9.5×.
+**19.55 dB RMS reduction** — amplitude reduced by a factor of ~9.5×.
 
 ---
 
 ### Active Cancellation — Frequency Domain
-
 <p align="center">
   <img src="cancellation_psd.png" width="800"/>
 </p>
 
-**23.06 dB suppression at ~1000 Hz** — a 200× reduction in acoustic power, completely breaking the Rayleigh feedback loop.
+**23.06 dB suppression at ~1000 Hz** — 200× reduction in acoustic power, completely breaking the Rayleigh feedback loop.
 
 ---
 
 ### Per-Frequency Reduction
-
 <p align="center">
   <img src="per_freq_reduction.png" width="700"/>
 </p>
 
-Broadband suppression confirmed across the fundamental mode and all harmonic frequencies — not just a single narrowband spike.
+Broadband suppression confirmed across all fundamental and harmonic instability frequencies.
 
 ---
 
 ### Inference Latency
-
 <p align="center">
   <img src="latency_distribution.png" width="600"/>
 </p>
 
-Mean 6.89 ms, p99 11.04 ms across 100 CPU benchmark runs. Tight, deterministic distribution confirms readiness for LabVIEW/FPGA deployment.
+Mean 6.89 ms, p99 11.04 ms across 100 CPU benchmark runs — confirms readiness for LabVIEW/FPGA deployment.
 
 ---
 
@@ -222,14 +215,14 @@ Mean 6.89 ms, p99 11.04 ms across 100 CPU benchmark runs. Tight, deterministic d
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR-USERNAME/SUPRA.git
-cd SUPRA
+git clone https://github.com/YOUR-USERNAME/Hybrid_TCN-GRU_prediction_model.git
+cd Hybrid_TCN-GRU_prediction_model
 
 # 2. Install dependencies
 pip install -r requirements.txt
 
 # 3. Train the model
-python src/supra_train.py
+python src/train.py
 
-# 4. Evaluate and generate cancellation plots
-python src/supra_evaluate.py
+# 4. Evaluate and generate plots
+python src/evaluate.py
