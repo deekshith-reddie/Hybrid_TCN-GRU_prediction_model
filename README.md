@@ -1,7 +1,7 @@
 # ⚡ Active-loop Thermo-acoustic Instability Stabilization Prediction Model Using TCN-GRU Hybrid Architecture
 
 <p align="center">
-  <img src="supra_lab.png" width="750"/>
+  <img src="supra_lab.jpeg" width="750"/>
   <br/>
   <em>SUPRA experimental setup at IIT (ISM) Dhanbad — Dept. of Mechanical Engineering</em>
 </p>
