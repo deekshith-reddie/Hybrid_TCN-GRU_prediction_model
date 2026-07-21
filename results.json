@@ -1,0 +1,71 @@
+{
+  "run_id": "20260719_140905",
+  "model_tag": "tcn_v5_env_attn_gru_f32_d6_se_20260719_140905",
+  "timestamp": "2026-07-19 14:51:46",
+  "config": {
+    "look_back": 200,
+    "horizon_ms": 20.0,
+    "tcn_filters": 32,
+    "tcn_dilations": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "receptive_field": 253,
+    "dropout": 0.2,
+    "layer_norm": true,
+    "se_block": true,
+    "n_features": 5,
+    "feature_cols": [
+      "pressure_pa",
+      "rms_5ms",
+      "rms_50ms",
+      "rms_500ms",
+      "amp_deriv"
+    ],
+    "use_envelope": true,
+    "use_attention": true,
+    "att_heads": 2,
+    "use_gru": true,
+    "gru_units": 32,
+    "gru_downsample": 8
+  },
+  "training": {
+    "actual_epochs": 49,
+    "train_time_s": 2551.97,
+    "best_val_loss": 0.001772708143107593
+  },
+  "accuracy": {
+    "rmse_pa": 134.33821,
+    "mae_pa": 109.30524,
+    "r2": 0.98888,
+    "pearson_r": 0.99685,
+    "durbin_watson": 1.2528
+  },
+  "phase": {
+    "dominant_freq_hz": 1000.0,
+    "phase_error_deg": 0.0
+  },
+  "cancellation": {
+    "reduction_db_td": 19.55,
+    "reduction_db_fd": 23.06
+  },
+  "latency": {
+    "CPU": {
+      "device": "/CPU:0",
+      "n_runs": 100,
+      "n_warmup": 10,
+      "warmup_mean": 70.12283999993087,
+      "p50": 6.766400000742578,
+      "p95": 8.726949999982024,
+      "p99": 11.043265999542209,
+      "mean": 6.888183000046411,
+      "max": 12.713000000076136,
+      "std": 1.1854310308295137,
+      "jitter": 1.1854310308295137
+    }
+  }
+}
