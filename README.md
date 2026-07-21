@@ -1,7 +1,7 @@
 # 🔥 SUPRA — Suppression of Pressure Oscillations Using Artificial Intelligence
 
 <p align="center">
-  <img src="artifacts/cancellation_psd.png" width="750"/>
+  <img src="cancellation_psd.png" width="750"/>
   <br/>
   <em>23.06 dB acoustic power suppression at the dominant thermoacoustic instability frequency</em>
 </p>
@@ -80,7 +80,7 @@ Thermoacoustic instability is one of the most dangerous and difficult-to-control
 ## 🏗️ System Architecture
 
 <p align="center">
-  <img src="artifacts/supra_flowchart.png" width="800"/>
+  <img src="supra_flowchart.png" width="800"/>
   <br/>
   <em>End-to-end SUPRA control pipeline</em>
 </p>
@@ -101,7 +101,7 @@ Thermoacoustic instability is one of the most dangerous and difficult-to-control
 ## 🧠 Neural Network Architecture (Hybrid TCN-GRU)
 
 <p align="center">
-  <img src="artifacts/supra_nn_architecture.jpg" width="720"/>
+  <img src="supra_nn_architecture.jpg" width="720"/>
   <br/>
   <em>The Hybrid TCN-GRU model: 4-channel input → 6 dilated TCN blocks → SE-Attention → GRU tail → pressure prediction</em>
 </p>
@@ -150,7 +150,7 @@ Thermoacoustic instability is one of the most dangerous and difficult-to-control
 ### Training History
 
 <p align="center">
-  <img src="artifacts/training_history.png" width="700"/>
+  <img src="training_history.png" width="700"/>
 </p>
 
 Training and validation MSE tracked tightly for all 50 epochs with no overfitting. The four kinks are `ReduceLROnPlateau` halving events at epochs 23, 32, 42, and 47.
@@ -160,7 +160,7 @@ Training and validation MSE tracked tightly for all 50 epochs with no overfittin
 ### Prediction Accuracy — Actual vs Predicted
 
 <p align="center">
-  <img src="artifacts/pred_vs_actual_scatter.png" width="600"/>
+  <img src="pred_vs_actual_scatter.png" width="600"/>
 </p>
 
 Tight diagonal clustering with R² = 0.988. No amplitude compression at peaks — a common failure of pure-TCN models that the GRU tail corrects.
@@ -170,8 +170,8 @@ Tight diagonal clustering with R² = 0.988. No amplitude compression at peaks �
 ### Residual Analysis
 
 <p align="center">
-  <img src="artifacts/residual_autocorrelation.png" width="45%"/>
-  <img src="artifacts/error_analysis.png" width="45%"/>
+  <img src="residual_autocorrelation.png" width="45%"/>
+  <img src="error_analysis.png" width="45%"/>
 </p>
 
 ACF of residuals decays rapidly to zero (near white-noise errors). Error distribution is Gaussian and centred at zero — no systematic directional bias.
@@ -181,7 +181,7 @@ ACF of residuals decays rapidly to zero (near white-noise errors). Error distrib
 ### Active Cancellation — Time Domain
 
 <p align="center">
-  <img src="artifacts/cancellation_timedomain.png" width="800"/>
+  <img src="cancellation_timedomain.png" width="800"/>
 </p>
 
 **19.55 dB RMS reduction.** The amplitude of the instability is reduced by a factor of ~9.5×.
@@ -191,7 +191,7 @@ ACF of residuals decays rapidly to zero (near white-noise errors). Error distrib
 ### Active Cancellation — Frequency Domain
 
 <p align="center">
-  <img src="artifacts/cancellation_psd.png" width="800"/>
+  <img src="cancellation_psd.png" width="800"/>
 </p>
 
 **23.06 dB suppression at ~1000 Hz** — a 200× reduction in acoustic power, completely breaking the Rayleigh feedback loop.
@@ -201,7 +201,7 @@ ACF of residuals decays rapidly to zero (near white-noise errors). Error distrib
 ### Per-Frequency Reduction
 
 <p align="center">
-  <img src="artifacts/per_freq_reduction.png" width="700"/>
+  <img src="per_freq_reduction.png" width="700"/>
 </p>
 
 Broadband suppression confirmed across the fundamental mode and all harmonic frequencies — not just a single narrowband spike.
@@ -211,7 +211,7 @@ Broadband suppression confirmed across the fundamental mode and all harmonic fre
 ### Inference Latency
 
 <p align="center">
-  <img src="artifacts/latency_distribution.png" width="600"/>
+  <img src="latency_distribution.png" width="600"/>
 </p>
 
 Mean 6.89 ms, p99 11.04 ms across 100 CPU benchmark runs. Tight, deterministic distribution confirms readiness for LabVIEW/FPGA deployment.
