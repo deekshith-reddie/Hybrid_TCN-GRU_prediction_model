@@ -1,24 +1,7 @@
 """
 SUPRA TCN v5 - Hybrid Thermoacoustic Instability Suppressor
 =============================================================
-Upgrades from v4:
-  - NEW: Multi-scale envelope features (rms_5ms, rms_50ms, rms_500ms, amp_deriv)
-         Computed automatically at data load time. No CSV changes needed.
-  - NEW: Optional GRU tail (TCN -> DownsampleStride -> GRU) for tracking
-         non-stationary amplitude changes across cycles.
-  - NEW: Optional Multi-Head Self-Attention between TCN and GRU for
-         detecting mode-switching events.
-  - NEW: DownsampleStride serializable custom layer for GRU input reduction.
 
-All v4 fixes retained:
-  - FIXED: circular import  (from keras -> from tensorflow.keras)
-  - FIXED: Lambda serialization (replaced with @register_keras_serializable)
-  - FIXED: WarmUpLR Keras 3.x (direct assignment instead of K.set_value)
-  - FIXED: deprecated pandas fillna(method=...) -> .ffill()/.bfill()
-  - FIXED: O(n2) np.correlate -> FFT-based scipy.signal.correlate
-  - FIXED: tf.keras.saving AttributeError -> version-safe _reg wrapper
-  - PERF:  tf.data.Dataset pipeline with prefetch/cache
-"""
 
 # ==========================================
 # STDLIB / THIRD-PARTY IMPORTS
