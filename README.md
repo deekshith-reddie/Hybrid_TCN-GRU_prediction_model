@@ -139,7 +139,6 @@ Thermoacoustic instability is one of the most dangerous phenomena in modern comb
 | MAE | 109.31 Pa |
 | **R² Score** | **0.988** |
 | Pearson r | 0.996 |
-| Durbin-Watson | 1.25 |
 | Phase Error | **0.0°** at dominant mode |
 | Time-Domain RMS Reduction | **19.55 dB** (~9.5× amplitude) |
 | Frequency-Domain Suppression | **23.06 dB** (~200× power) |
