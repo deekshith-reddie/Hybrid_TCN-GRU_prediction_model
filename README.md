@@ -73,7 +73,7 @@ Thermoacoustic instability is one of the most dangerous phenomena in modern comb
 | **Deep Learning** | TensorFlow / Keras |
 | **Signal Processing** | NumPy, SciPy |
 | **Data & Visualisation** | Pandas, Matplotlib |
-| **Future Hardware** | NI LabVIEW, NI DAQ, FPGA |
+| **Future Hardware** | NI LabVIEW, NI cDAQ 9177, NI 9222, NI9322 |
 
 ---
 
